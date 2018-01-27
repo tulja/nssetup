@@ -7,9 +7,14 @@ sudo pip install --upgrade setuptools
 sudo pip install netifaces
 sudo apt-get install -y libssl-dev
 sudo apt-get install -y iperf screen
-echo "Moving to Scripts folder "
-cd /opt/openbaton/scripts/
-cd NFV_LTE_EPC-1.0/scripts/v1.0
-chmod 777 install.sh
-./install.sh
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y install openvpn
+sudo apt-get -y install libsctp-dev
+sudo apt-get -y install openssl
+sudo add-apt-repository "ppa:patrickdk/general-lucid" -y
+sudo apt-get -y update
+sudo apt-get -y install iperf3
+sudo apt-get -y install htop
+
 
