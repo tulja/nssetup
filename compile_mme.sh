@@ -1,2 +1,2 @@
-cd /opt/openbaton/scripts/NFV_LTE_EPC-1.0/src/
+cd /opt/openbaton/scripts/LTECode/
 sudo make mme.out
