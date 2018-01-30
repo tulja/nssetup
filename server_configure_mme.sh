@@ -5,6 +5,7 @@ echo "Server IP is "
 echo $server_private
 echo "Server Hostname is "
 echo $server_hostname 
+$server_hostname=$(echo $server_hostname | cut -d- -f1 )
 
 s1="sgw1"
 s2="pgw1"
