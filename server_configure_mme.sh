@@ -5,18 +5,21 @@ echo "Server IP is "
 echo $server_private
 echo "Server Hostname is "
 echo $server_hostname 
-$server_hostname=$(echo $server_hostname | cut -d- -f1 )
-
+$server=$(echo $server_hostname | cut -d- -f1 )
+echo "Hey it is " 
+echo $server
 s1="sgw1"
 s2="pgw1"
-if [ "$server_hostname" == "$s1" ]; then
+if [ "$server" == "$s1" ]; then
 	echo "g_"$server_hostname"_ip_addr=\"\\\""$server_private"\\\";\"" >> sgw1.txt
 fi
-
-if [ "$server_hostname" == "$s2" ]; then
+echo "Contents of sgw1.txt are " 
+cat sgw1.txt
+if [ "$server" == "$s2" ]; then
 	echo "g_"$server_hostname"_ip_addr=\"\\\""$server_private"\\\";\"" >> pgw1.txt
 fi
-
+echo "Contents of pgw1.txt are " 
+cat pgw1.txt
 
 
 #if server hostname == sgw1 write server_private to sgw1.txt 
