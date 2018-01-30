@@ -12,6 +12,11 @@ if [ "$server_hostname" == "$s1" ]; then
    echo match
 fi
 
+if [ "$server_hostname" == "$s2" ]; then
+   echo match
+fi
+
+
 
 #if server hostname == sgw1 write server_private to sgw1.txt 
 
