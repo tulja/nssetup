@@ -6,6 +6,12 @@ echo $server_private
 echo "Server Hostname is "
 echo $server_hostname 
 
+s1="sgw1"
+s2="pgw1"
+if [ "$server_hostname" == "$s1" ]; then
+   echo match
+fi
+
 
 #if server hostname == sgw1 write server_private to sgw1.txt 
 
