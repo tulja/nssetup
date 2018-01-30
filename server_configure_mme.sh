@@ -13,7 +13,7 @@ if [ "$server_hostname" == "$s1" ]; then
 fi
 
 if [ "$server_hostname" == "$s2" ]; then
-   echo match
+	echo "g_"$server_hostname"_ip_addr=\"\\\""$server_private"\\\";\"" >> pgw1.txt
 fi
 
 
