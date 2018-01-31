@@ -1,7 +1,7 @@
 #include "mme_server.h"
 #include "sync.h"
 #include <fstream>
-
+using namespace std;
 Mme g_mme;
 int g_workers_count;
 vector<SctpClient> hss_clients;
@@ -14,7 +14,7 @@ Packet pkt_session[100];
 int ran_num2wrk_id[100];
 int numberOfActiveInstances = 0 ;
 int numberOfActiveInstancesdetach = 0 ;
-
+string sgw1_ip,pgw1_ip;
 const int SLICE_LIMIT = 25;
 const int NUMBER_OF_INSTANCES = 5 ;
 
@@ -98,8 +98,11 @@ int handle_ue(int conn_fd, int worker_id) {
      ofstream myfile[NUMBER_OF_INSTANCES];
      ofstream instanceVStimefile,sysLoadFile;
      int systemLoadDetach,systemLoadAttach;
-    
-    MICROSECONDS mtime_diff_us;		
+    std::fstream sgw1("/home/ubuntu/sgw1.txt", std::ios_base::in);    
+    sgw1 >> sgw1_ip;
+    std::fstream pgw1("/home/ubuntu/pgw1.txt", std::ios_base::in); 
+    pgw1 >> pgw1_ip;
+   MICROSECONDS mtime_diff_us;		
 
 	CLOCK::time_point mstop_time;
      double elapsedTime;
@@ -141,10 +144,14 @@ int handle_ue(int conn_fd, int worker_id) {
                            	case 1:
                            	       TRACE(cout << "mmeserver_handleue:" << "Data Traffic will be redirected to Slice no "<<qci << endl;)
                            	       ///SPGW SLICE 1 
-                           	       g_sgw_s1_ip_addr = "10.0.3.240";  
-                                   g_sgw_s11_ip_addr = "10.0.3.240";
-                                   g_sgw_s5_ip_addr = "10.0.3.240";
-                                   g_pgw_s5_ip_addr = "10.0.3.112"; 
+                           	   //string sgw1_ip;
+                                   //sgw1 >> sgw1_ip;
+                                   //string pgw1_ip;
+                                   //pgw1 >> pgw1;   
+                                   g_sgw_s1_ip_addr = sgw1_ip;  
+                                   g_sgw_s11_ip_addr = sgw1_ip;
+                                   g_sgw_s5_ip_addr = sgw1_ip;
+                                   g_pgw_s5_ip_addr = pgw1_ip; 
                            	       break;
                            	case 2:
                            	       TRACE(cout << "mmeserver_handleue:" << "Data Traffic will be redirected to Slice no "<<qci << endl;)
@@ -298,11 +305,7 @@ int handle_ue(int conn_fd, int worker_id) {
 
           mstop_time = CLOCK::now();
           mtime_diff_us = std::chrono::duration_cast<MICROSECONDS>(mstop_time - mstart_time);
-          /*myfile1 << mtime_diff_us.count()/1000000.0 << "  " << Instance[0]<<endl;
-          myfile2 << mtime_diff_us.count()/1000000.0 << "  " << Instance[1]<<endl;
-          myfile3 << mtime_diff_us.count()/1000000.0 << "  " << Instance[2]<<endl;
-            myfile4 << mtime_diff_us.count()/1000000.0 << "  " << Instance[3]<<endl;
-               myfile5 << mtime_diff_us.count()/1000000.0 << "  " << Instance[4]<<endl;*/
+       
           for (int i = 0; i < NUMBER_OF_INSTANCES; ++i)
           {
           
@@ -330,91 +333,16 @@ int handle_ue(int conn_fd, int worker_id) {
                            	       TRACE(cout << "mmeserver_handleue:" << "Data Traffic will be redirected to Slice no "<<qci << endl;)
                            	    
                            	       g_sync.mlock(g_mux);
-                                   (qci_number[qci])++;
-                                    
-                                  for (int i = 0; i < NUMBER_OF_INSTANCES; ++i)
-                                  {
-                                    Temp_Instance[i] = Instance[i];
-                                  }
-
-                                  int value = maximumOfTempArrayofInstances();
-                                  int index = indexOfmaxOftemp();
-
-                                  while(value == SLICE_LIMIT){
-                                    Temp_Instance[index] = -1 ; 
-                                    value = maximumOfTempArrayofInstances();
-                                    index = indexOfmaxOftemp();
-                                  } 
-
-                                  if(value != -1){
-                                     (Instance[index])++;
-                                   g_sgw_s1_ip_addr = Instance_SGW[index];  
-                                   g_sgw_s11_ip_addr = Instance_SGW[index];
-                                   g_sgw_s5_ip_addr = Instance_SGW[index];
-                                   g_pgw_s5_ip_addr = Instance_PGW[index]; 
-                                    UE2Slice[ran_num][1] = index; 
-
-                                   }
-                                  else
-                                     TRACE(cout<<"All Instances are full";)
-                                   numberOfActiveInstances = 0 ;
-                                   for(int i =0 ;i < NUMBER_OF_INSTANCES ;i++)
-                                   {
-                                     if(Instance[i] > 0)
-                                     {
-                                        numberOfActiveInstances++;
-                                     }
-
-                                   }
-
-                              
+                                 
+                                   g_sgw_s1_ip_addr = sgw1_ip;  
+                                   g_sgw_s11_ip_addr = sgw1_ip;
+                                   g_sgw_s5_ip_addr = sgw1_ip;
+                                   g_pgw_s5_ip_addr = pgw1_ip; 
+                                  
+                         
                                    g_sync.munlock(g_mux);
-                                   
-                                   systemLoadAttach = 0 ;
- 
-                                   for (int i = 0; i < NUMBER_OF_INSTANCES; ++i)
-                                   {
-          	                         systemLoadAttach += Instance[i];
-                                   }
-
-
-                                
-
-
                                    mstop_time = CLOCK::now();
-                                   mtime_diff_us = std::chrono::duration_cast<MICROSECONDS>(mstop_time - mstart_time);
-
-
-
-                                   /*TRACE(cout<<"Value of  Instance[0] is "<<Instance[0]<<endl;)
-                                   TRACE(cout<<"Value of  Instance[1] is "<<Instance[1]<<endl;)
-                                   TRACE(cout<<"Value of  Instance[2] is "<<Instance[2]<<endl;)
-                                   TRACE(cout<<"Value of  Instance[3] is "<<Instance[3]<<endl;)
-                                   TRACE(cout<<"Value of  Instance[4] is "<<Instance[4]<<endl;)*/
-
-                                   for (int i = 0; i < NUMBER_OF_INSTANCES; ++i)
-                                   {
-                                   	 TRACE(cout<<"Value of  Instance["<<i<<"] is "<<Instance[i]<<endl;)
-                                   }
-
-                                   /*myfile1 << mtime_diff_us.count()/1000000.0 << "  " << Instance[0]<<endl;
-                                   myfile2 << mtime_diff_us.count()/1000000.0 << "  " << Instance[1]<<endl;
-                                   myfile3 << mtime_diff_us.count()/1000000.0 << "  " << Instance[2]<<endl;
-                                   myfile4 << mtime_diff_us.count()/1000000.0 << "  " << Instance[3]<<endl;
-                                   myfile5 << mtime_diff_us.count()/1000000.0 << "  " << Instance[4]<<endl;*/
-
-                                      for (int i = 0; i < NUMBER_OF_INSTANCES; ++i)
-                                      {
-          
-                                        myfile[i] << mtime_diff_us.count()/1000000.0<<" "<< Instance[i]<<endl;
-
-                                      }
-
-                                     sysLoadFile << mtime_diff_us.count()/1000000.0 << "  " << systemLoadAttach<<endl;
-                                      instanceVStimefile << mtime_diff_us.count()/1000000.0 << "  " << numberOfActiveInstances<<endl;
-
-
-                                   
+                                   mtime_diff_us = std::chrono::duration_cast<MICROSECONDS>(mstop_time - mstart_time);     
                            	       break;
                       
 
