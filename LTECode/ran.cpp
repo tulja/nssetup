@@ -1,8 +1,8 @@
 #include "ran.h"
 
-string g_ran_ip_addr = "10.0.3.242";
-string g_trafmon_ip_addr = "10.0.3.242";
-string g_mme_ip_addr = "10.0.3.51";
+string g_ran_ip_addr = "10.0.0.5";
+string g_trafmon_ip_addr = "10.0.0.5";
+string g_mme_ip_addr = "10.0.0.11";
 int g_trafmon_port = 4000;
 int g_mme_port = 5000;
 
@@ -409,12 +409,14 @@ bool Ran::set_eps_session(TrafficMonitor &traf_mon) {
 }
 
 void Ran::transfer_data(int ran_num) {
-	string cmd;
+	string cmd,avgUEthr;
 	string cmd_ping;
 	string cmd_echo;
 	string rate;	
-	int range = 20 - 5 + 1;
-    int num = rand() % range + 5;
+	int range = 60;
+        int num = rand() % range + 5;
+        num  = 60+rand()%range;
+        int bw = 5000000 + rand()%222222;
 	string mtu;
 	string dur = " -t "+std::to_string(num);;
 	string amount_of_data ;
@@ -422,7 +424,6 @@ void Ran::transfer_data(int ran_num) {
 	string server_ip_addr;
 	int server_port;
     TRACE(cout<<"transfer_data:Ran Number is "<<ran_num<<endl;)
-	rate = " -b " + to_string(1000) + "M";
 	mtu = " -M " + to_string(DATA_SIZE);
 	/*if(ran_num >=0 && ran_num <= 4)
 	    dur = " -t 10";
@@ -440,13 +441,14 @@ void Ran::transfer_data(int ran_num) {
 	redir_err = " 2>&1";
 	server_ip_addr = "172.16.0.2";
 	server_port = ran_ctx.key + 55000;
-	g_nw.add_itf(ran_ctx.key, ran_ctx.ip_addr + "/8");
+	g_nw.add_itf(ran_ctx.key, ran_ctx.ip_addr + "/16");
 
     ////////////////////////PING
-    //cmd_ping = "ping -I "+ran_ctx.ip_addr +"  172.16.0.2 -c 60 | grep \"^rtt\" >> ping_"+to_string(ran_ctx.imsi)+".txt";
-    //TRACE(cout << cmd_ping << endl;)
-	//system(cmd_ping.c_str());
-    
+    /*
+    cmd_ping = "ping -I "+ran_ctx.ip_addr +"  172.16.0.2 -c 60 | grep \"^rtt\" >> ping_"+to_string(ran_ctx.imsi)+".txt";
+    TRACE(cout << cmd_ping << endl;)
+    system(cmd_ping.c_str());
+    */
 
     /*int ran_num = ran_ctx.imsi%100;
     ///////////////////////Echo key 
@@ -460,14 +462,16 @@ void Ran::transfer_data(int ran_num) {
 	/*
 	 *  Running iperf when you want to send data for specified time interval (90 sec) 
 	 **/
-	cmd = "iperf3 -B " + ran_ctx.ip_addr + " -c " + server_ip_addr + " -p " + to_string(server_port) + rate + mtu + dur + redir_err + "| tee  -a "+to_string(ran_ctx.imsi)+".log";	
-	
+	cmd = "iperf3 -B " + ran_ctx.ip_addr + " -c " + server_ip_addr + " -p " + to_string(server_port) +"-f M" + mtu + dur + redir_err+" -b "+to_string(bw)+" | tee  "+to_string(ran_ctx.imsi)+".log";	
+        avgUEthr = "bash genSLA.sh "+to_string(ran_ctx.imsi)+".log";
+ 	//numOfUes = "expr $(netstat -an| grep ESTAB | wc -l) / 2"
 	// sending 100MB in the iperf 
 	//cmd = "iperf3 -B " + ran_ctx.ip_addr + " -c " + server_ip_addr + " -p " + to_string(server_port) + rate + mtu + amount_of_data + redir_err+ "| tee  -a "+to_string(ran_ctx.imsi)+".log";
 	//"| grep -Po '[0-9.]*(?= Mbits/sec)' |tail -1 >> Thr.txt";
 	
 	TRACE(cout << cmd << endl;)
 	system(cmd.c_str());
+        system(avgUEthr.c_str());
 	// g_nw.rem_itf(ran_ctx.key);
 
 	TRACE(cout << "ran_transferdata:" << " transfer done for ran: " << ran_ctx.imsi << endl;)
