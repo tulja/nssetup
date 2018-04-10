@@ -176,12 +176,36 @@ int schedule(){
        
     }
 
-    /*for(int k =0 ; k< 300;k++)
+    
+    int startTime = 3;
+    int numUEInc = 2;
+    int lowerbound = 0;
+    int upperbound = numUEInc; 
+    for( int i = 0 ; i < 10 ; i++)
     {
-    	cout<<"Time "<<k<<" "<<TimetoStart[k]<<endl;
+      for(int j = lowerbound; j<= upperbound;j++)
+          {
+            TimetoStart[j] =  startTime+60*i;
+          }
+	lowerbound = lowerbound+numUEInc*(i+1);
+        upperbound = upperbound+numUEInc*(i+2);
+    }
+   /* for(int k =0 ; k< 300;k++)
+    {
+        TimetoStart[k]=3;
     }*/
+   int k = 3 ;
+   for(int i = 14 ; i < 19 ; i++)
+   {
+      for(int j = lowerbound; j<= upperbound;j++)
+          {
+            TimetoStart[j] =  startTime+60*i;
+          }
+        lowerbound = lowerbound+numUEInc*(k);
+        upperbound = upperbound+numUEInc*(k+1);
+        k--;
 
-
+   } 
 
 
 	
@@ -295,61 +319,7 @@ void simulate(int arg) {
 
 		/* Data transfer */
 		bearer_count++;		
-       //if(ran_num != 3 && ran_num != 4 && ran_num != 6 && ran_num != 7)
-		/*
-        if(ran_num == 2 )
-        ran.transfer_data(g_req_dur);	
-        if(ran_num == 0)
-        	ran.transfer_data(g_req_dur);
-		
-		
-        if(ran_num == 3 || ran_num == 1){
-    	  // Set eps session again for second time for second kind of traffic 
-        qci = 1 ;
-        ran.add_dedicated_bearer(qci);
-        TRACE(cout << "ransimulator_simulate:" << " ran number " << ran_num << endl;)
-        TRACE(cout << "ransimulator_simulate:" << " another bearer is being setup for ran_num" <<ran_num << endl;)
-		ok = ran.set_eps_session(g_traf_mon);
-		if (!ok) {
-			TRACE(cout << "ransimulator_simulate:" << " eps session setup failure" << endl;)
-			return;
-		}
-		//ran.set_data_plane(1);
-		ran.transfer_data(g_req_dur);
-
-        TRACE(cout << "ransimulator_simulate:" << " data transfer done on the Dedicated Bearer " << endl;)
-        }
-        
-         if(ran_num == 4 || ran_num == 9){
-    	  // Set eps session again for second time for second kind of traffic 
-        // 	qci = 2 ;
-        ran.add_dedicated_bearer(2);
-        TRACE(cout << "ransimulator_simulate:" << " ran number " << ran_num << endl;)
-       TRACE(cout << "ransimulator_simulate:" << " another bearer is being setup for ran_num" <<ran_num << endl;)
-		ok = ran.set_eps_session(g_traf_mon);
-		if (!ok) {
-			TRACE(cout << "ransimulator_simulate:" << " eps session setup failure" << endl;)
-			return;
-		}
-		ran.transfer_data(g_req_dur);
-        TRACE(cout << "ransimulator_simulate:" << " data transfer done on the Dedicated Bearer " << endl;)
-        }
-        
-         if(ran_num == 6 || ran_num == 5 || ran_num == 8 || ran_num == 7){
-    	  // Set eps session again for second time for second kind of traffic
-    	//  qci = 3 ; 
-        ran.add_dedicated_bearer(3);
-        TRACE(cout << "ransimulator_simulate:" << " ran number " << ran_num << endl;)
-      TRACE(cout << "ransimulator_simulate:" << " another bearer is being setup for ran_num" <<ran_num << endl;)
-		ok = ran.set_eps_session(g_traf_mon);
-		if (!ok) {
-			TRACE(cout << "ransimulator_simulate:" << " eps session setup failure" << endl;)
-			return;
-		}
-		ran.transfer_data(g_req_dur);
-        TRACE(cout << "ransimulator_simulate:" << " data transfer done on the Dedicated Bearer " << endl;)
-        }
-        */
+       
          if(ran_num >=0 && ran_num < 450){
     	  // Set eps session again for second time for second kind of traffic 
          	qci = 1 ;
@@ -364,8 +334,8 @@ void simulate(int arg) {
 		//ip_addr = ran.ran_ctx.ip_addr;
 		//s1_uteid_ul = ran.ran_ctx.s1_uteid_ul;
 		//ran.transfer_data(g_req_dur);
-		ran.scale_down(g_traf_mon,ran_num);
-		//ran.transfer_data(ran_num);
+		//ran.scale_down(g_traf_mon,ran_num);
+		ran.transfer_data(ran_num);
         TRACE(cout << "ransimulator_simulate:" << " data transfer done on the Dedicated Bearer " << endl;)
         }
         
