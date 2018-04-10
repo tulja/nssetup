@@ -16,5 +16,11 @@ sudo add-apt-repository "ppa:patrickdk/general-lucid" -y
 sudo apt-get -y update
 sudo apt-get -y install iperf3
 sudo apt-get -y install htop
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password secret'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password secret'
+sudo apt-get -y install mysql-server
+sudo apt-get -y install libmysqlclient-dev
 
 
