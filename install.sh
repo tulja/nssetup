@@ -23,4 +23,3 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again p
 sudo apt-get -y install mysql-server
 sudo apt-get -y install libmysqlclient-dev
 
-
