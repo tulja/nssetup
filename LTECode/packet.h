@@ -11,7 +11,7 @@
 
 #define BUF_SIZE 1024
 #define IP_HDR_LEN 20
-#define DATA_SIZE 800
+#define DATA_SIZE 100
 
 class Packet {
 public:

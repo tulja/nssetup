@@ -103,14 +103,14 @@ string Network::get_dst_ip_addr(Packet pkt) {
 void Network::add_itf(int itf_no, string ip_addr_sp) {
 	string cmd;
 
-	cmd = "sudo ifconfig eth0:" + to_string(itf_no) + " " + ip_addr_sp;
+	cmd = "sudo ifconfig ens3:" + to_string(itf_no) + " " + ip_addr_sp;
 	system(cmd.c_str());
 }
 
 void Network::rem_itf(int itf_no) {
 	string cmd;
 
-	cmd = "sudo ifconfig eth0:" + to_string(itf_no) + " down";
+	cmd = "sudo ifconfig ens3:" + to_string(itf_no) + " down";
 	system(cmd.c_str());
 }
 

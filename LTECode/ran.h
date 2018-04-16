@@ -142,7 +142,7 @@ public:
 	bool authenticate();
 	bool set_security();
 	bool set_eps_session(TrafficMonitor&);
-	void transfer_data(int);
+	void transfer_data(int,int,int);
 	void transfer_udp_data(int);
 	bool detach(int);	
 	void scale_down(TrafficMonitor &traf_mon,int ran_num);

@@ -7,6 +7,8 @@ int g_threads_count;
 int bearer_count = 0 ;
 uint64_t g_req_dur;
 uint64_t g_run_dur;
+int g_traf_dur;
+int packets_per_sec;
 time_t start ;
 int g_tot_regs;
 uint64_t g_tot_regstime;
@@ -178,7 +180,7 @@ int schedule(){
 
     
     int startTime = 3;
-    int numUEInc = 2;
+    int numUEInc = 10;
     int lowerbound = 0;
     int upperbound = numUEInc; 
     for( int i = 0 ; i < 10 ; i++)
@@ -194,7 +196,7 @@ int schedule(){
     {
         TimetoStart[k]=3;
     }*/
-   int k = 3 ;
+   int k = 4 ;
    for(int i = 14 ; i < 19 ; i++)
    {
       for(int j = lowerbound; j<= upperbound;j++)
@@ -207,7 +209,14 @@ int schedule(){
 
    } 
 
-
+   //Only for Testing
+   for(int i=0;i<150;i++){
+ 	if(i>=0 && i<50)
+	TimetoStart[i] = 3;
+	else
+	TimetoStart[i] = 20000;
+   }
+   
 	
 }
 
@@ -335,7 +344,7 @@ void simulate(int arg) {
 		//s1_uteid_ul = ran.ran_ctx.s1_uteid_ul;
 		//ran.transfer_data(g_req_dur);
 		//ran.scale_down(g_traf_mon,ran_num);
-		ran.transfer_data(ran_num);
+		ran.transfer_data(ran_num,g_traf_dur,packets_per_sec);
         TRACE(cout << "ransimulator_simulate:" << " data transfer done on the Dedicated Bearer " << endl;)
         }
         
@@ -374,6 +383,8 @@ void init(char *argv[]) {
 	g_start_time = time(0);
 	g_threads_count = atoi(argv[1]);
 	g_req_dur = atoi(argv[2]);
+	g_traf_dur = atoi(argv[3]);
+	packets_per_sec = atoi(argv[4]);
 	g_tot_regs = 0;
 	g_tot_regstime = 0;
 	g_sync.mux_init(g_mux);	
